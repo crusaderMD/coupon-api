@@ -1,6 +1,9 @@
 package com.lbortolotti.coupon.api.service;
 
+import com.lbortolotti.coupon.api.controller.dto.CouponRequestDTO;
+import com.lbortolotti.coupon.api.controller.dto.CouponResponseDTO;
 import com.lbortolotti.coupon.api.domain.Coupon;
+import com.lbortolotti.coupon.api.mapper.CouponMapper;
 import com.lbortolotti.coupon.api.repository.CouponRepository;
 import org.springframework.stereotype.Service;
 
@@ -13,12 +16,16 @@ public class CouponService {
         this.couponRepository = couponRepository;
     }
 
-    public Coupon saveCoupon(Coupon coupon) {
+    public CouponResponseDTO saveCoupon(CouponRequestDTO requestDTO) {
 
-        if (couponRepository.existsByCode(coupon.getCode())) {
+        if (couponRepository.existsByCode(requestDTO.getCode())) {
             throw new RuntimeException("Coupon already exists");
         }
 
-        return couponRepository.save(coupon);
+        Coupon coupon = CouponMapper.toEntity(requestDTO);
+
+        Coupon savedCoupon = couponRepository.save(coupon);
+
+        return CouponMapper.toResponse(savedCoupon);
     }
 }
