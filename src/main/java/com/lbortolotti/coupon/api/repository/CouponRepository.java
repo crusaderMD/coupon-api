@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CouponRepository extends JpaRepository<Coupon, Long> {
 
-    boolean existesByCode(String code);
+    boolean existsByCode(String code);
 
 }
