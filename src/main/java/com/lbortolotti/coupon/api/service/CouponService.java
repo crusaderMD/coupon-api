@@ -8,7 +8,7 @@ import com.lbortolotti.coupon.api.repository.CouponRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CouponService {
+public class CouponService implements ICouponService{
 
     private final CouponRepository couponRepository;
 
