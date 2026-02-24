@@ -15,7 +15,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/coupons")
-public class CouponController {
+public class CouponController implements ICouponController{
 
 private final ICouponService couponService;
 

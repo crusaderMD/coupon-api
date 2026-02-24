@@ -5,5 +5,5 @@ import com.lbortolotti.coupon.api.controller.dto.CouponResponseDTO;
 
 public interface ICouponService {
 
-    public CouponResponseDTO saveCoupon(CouponRequestDTO requestDTO);
+    CouponResponseDTO saveCoupon(CouponRequestDTO requestDTO);
 }
