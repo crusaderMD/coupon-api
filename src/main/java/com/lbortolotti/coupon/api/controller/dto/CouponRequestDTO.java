@@ -5,7 +5,7 @@ import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
-@Schema(name = "CouponRequestDTO",
+@Schema(name = "Coupon Request",
         description = "Payload used to create a new coupon with information provided by the client.")
 public class CouponRequestDTO {
 
