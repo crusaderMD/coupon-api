@@ -4,7 +4,6 @@ import com.lbortolotti.coupon.api.controller.dto.CouponRequestDTO;
 import com.lbortolotti.coupon.api.controller.dto.CouponResponseDTO;
 import com.lbortolotti.coupon.api.service.ICouponService;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
