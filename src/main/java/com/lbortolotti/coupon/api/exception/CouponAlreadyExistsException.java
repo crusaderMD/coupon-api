@@ -1,19 +1,10 @@
 package com.lbortolotti.coupon.api.exception;
 
-public class CouponAlreadyExistsException extends RuntimeException{
+import com.lbortolotti.coupon.api.error.ApiErrorCode;
 
-    private final String code;
+public class CouponAlreadyExistsException extends BusinessException {
 
     public CouponAlreadyExistsException(final String code) {
-        super(buildMessage(code));
-        this.code = code;
-    }
-
-    private static String buildMessage(final String code) {
-        return "Coupon with code " + code + " already exists";
-    }
-
-    public String getCode() {
-        return code;
+        super(ApiErrorCode.COUPON_ALREADY_EXISTS);
     }
 }
