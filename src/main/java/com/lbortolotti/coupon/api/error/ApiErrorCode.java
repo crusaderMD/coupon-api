@@ -2,7 +2,8 @@ package com.lbortolotti.coupon.api.error;
 
 public enum ApiErrorCode {
     COUPON_ALREADY_EXISTS("Coupon already exists"),
-    INTERNAL_SERVER_ERROR("Unexpected internal error");
+    INTERNAL_SERVER_ERROR("Unexpected internal error"),
+    VALIDATION_ERROR("Validation error");
 
     private final String defaultMessage;
 
