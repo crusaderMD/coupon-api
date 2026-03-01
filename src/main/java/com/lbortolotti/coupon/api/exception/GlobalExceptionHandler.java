@@ -21,11 +21,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 
-    @ExceptionHandler(CouponAlreadyExistsException.class)
-    public ResponseEntity<ErrorResponseDTO> handleCouponAlreadyExists(CouponAlreadyExistsException ex, HttpServletRequest request) {
-        ErrorResponseDTO response = ErrorResponseDTO.of(HttpStatus.CONFLICT,
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ErrorResponseDTO> handleBusinessException(BusinessException ex, HttpServletRequest request) {
+
+        ApiErrorCode errorCode = ex.getApiErrorCode();
+
+        ErrorResponseDTO response = ErrorResponseDTO.of(
+                errorCode.getHttpStatus(),
                 ex.getMessage(),
-                ApiErrorCode.COUPON_ALREADY_EXISTS,
+                errorCode,
                 request.getRequestURI());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
