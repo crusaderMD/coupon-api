@@ -1,5 +1,6 @@
 package com.lbortolotti.coupon.api.controller.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 
@@ -26,6 +27,7 @@ public class CouponRequestDTO {
         example = "2026-02-25")
     @NotNull(message = "Expiration date is required")
     @FutureOrPresent(message = "Expiration date must be today or in the future")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate expirationDate;
 
     public CouponRequestDTO() {}

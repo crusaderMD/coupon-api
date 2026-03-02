@@ -5,6 +5,7 @@ import com.lbortolotti.coupon.api.error.ApiErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -13,7 +14,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponseDTO> handleException(Exception ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponseDTO> handleException(Exception ex,
+                                                            HttpServletRequest request) {
         ErrorResponseDTO response = ErrorResponseDTO.of(HttpStatus.INTERNAL_SERVER_ERROR,
                 ApiErrorCode.INTERNAL_SERVER_ERROR.getDefaultMessage(),
                 ApiErrorCode.INTERNAL_SERVER_ERROR,
@@ -22,7 +24,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<ErrorResponseDTO> handleBusinessException(BusinessException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponseDTO> handleBusinessException(BusinessException ex,
+                                                                    HttpServletRequest request) {
 
         ApiErrorCode errorCode = ex.getApiErrorCode();
 
@@ -35,7 +38,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponseDTO> handleValidationError(MethodArgumentNotValidException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponseDTO> handleValidationError(MethodArgumentNotValidException ex,
+                                                                  HttpServletRequest request) {
         String errorMessage = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
@@ -49,6 +53,21 @@ public class GlobalExceptionHandler {
                 ApiErrorCode.VALIDATION_ERROR,
                 request.getRequestURI()
         );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponseDTO> handleInvalidFormat(HttpMessageNotReadableException ex,
+                                                                HttpServletRequest request) {
+        String errorMessage = "Invalid expiration date format. Expected format yyyy-MM-dd";
+
+        ErrorResponseDTO response = ErrorResponseDTO.of(
+                HttpStatus.BAD_REQUEST,
+                errorMessage,
+                ApiErrorCode.VALIDATION_ERROR,
+                request.getRequestURI()
+        );
+
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 }
