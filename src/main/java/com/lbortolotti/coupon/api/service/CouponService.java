@@ -2,6 +2,7 @@ package com.lbortolotti.coupon.api.service;
 
 import com.lbortolotti.coupon.api.controller.dto.CouponRequestDTO;
 import com.lbortolotti.coupon.api.controller.dto.CouponResponseDTO;
+import com.lbortolotti.coupon.api.controller.dto.CouponUpdateRequestDTO;
 import com.lbortolotti.coupon.api.domain.Coupon;
 import com.lbortolotti.coupon.api.exception.CouponAlreadyExistsException;
 import com.lbortolotti.coupon.api.mapper.CouponMapper;
@@ -28,5 +29,18 @@ public class CouponService implements ICouponService{
         Coupon savedCoupon = couponRepository.save(coupon);
 
         return CouponMapper.toResponse(savedCoupon);
+    }
+
+    public CouponResponseDTO updateCoupon(CouponUpdateRequestDTO couponUpdateRequestDTO, String code) {
+
+        Coupon coupon = couponRepository.findByCode(code);
+
+        if (coupon == null) {
+            throw new RuntimeException(""); //change for specific exception
+        }
+
+        coupon.update(couponUpdateRequestDTO.getDiscount(), couponUpdateRequestDTO.getExpirationDate());
+
+        return CouponMapper.toResponse(couponRepository.save(coupon));
     }
 }
