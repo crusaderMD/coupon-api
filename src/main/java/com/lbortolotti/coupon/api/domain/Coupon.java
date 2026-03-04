@@ -1,5 +1,6 @@
 package com.lbortolotti.coupon.api.domain;
 
+import com.lbortolotti.coupon.api.constantes.ApiConstants;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -24,6 +25,9 @@ public class Coupon {
     protected Coupon() {}
 
     public Coupon(String code, Integer discount, LocalDate expirationDate) {
+
+        validateDiscountAndExpirationDate(discount, expirationDate);
+
         this.code = code;
         this.discount = discount;
         this.expirationDate = expirationDate;
@@ -33,7 +37,7 @@ public class Coupon {
         return id;
     }
 
-    public void setId(Long id) {
+    private void setId(Long id) {
         this.id = id;
     }
 
@@ -41,7 +45,7 @@ public class Coupon {
         return code;
     }
 
-    public void setCode(String code) {
+    private void setCode(String code) {
         this.code = code;
     }
 
@@ -49,7 +53,7 @@ public class Coupon {
         return discount;
     }
 
-    public void setDiscount(Integer discount) {
+    private void setDiscount(Integer discount) {
         this.discount = discount;
     }
 
@@ -57,7 +61,36 @@ public class Coupon {
         return expirationDate;
     }
 
-    public void setExpirationDate(LocalDate expirationDate) {
+    private void setExpirationDate(LocalDate expirationDate) {
         this.expirationDate = expirationDate;
+    }
+
+    public void update(Integer discount, LocalDate expirationDate) {
+
+        validateDiscountAndExpirationDate(discount, expirationDate);
+
+        this.discount = discount;
+        this.expirationDate = expirationDate;
+    }
+
+    private void validateDiscountAndExpirationDate(Integer discount, LocalDate expirationDate) {
+
+        if (discount == null) {
+            throw new RuntimeException("Discount cannot be null"); // change to specific exception
+        }
+
+        if (expirationDate == null) {
+            throw new RuntimeException("Expiration date cannot be null"); // change to specific exception
+        }
+
+        if (discount < ApiConstants.minCouponDiscount || discount > ApiConstants.maxCouponDiscount) {
+            throw new RuntimeException(""); // change for specific InvalidDiscountException
+        }
+
+        final LocalDate validateExpirationDate = LocalDate.now();
+
+        if (expirationDate.isBefore(validateExpirationDate)) {
+            throw new RuntimeException(""); // change for specific InvalidExpirationDateException
+        }
     }
 }
