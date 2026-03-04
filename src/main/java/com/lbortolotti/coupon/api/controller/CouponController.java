@@ -2,13 +2,11 @@ package com.lbortolotti.coupon.api.controller;
 
 import com.lbortolotti.coupon.api.controller.dto.CouponRequestDTO;
 import com.lbortolotti.coupon.api.controller.dto.CouponResponseDTO;
+import com.lbortolotti.coupon.api.controller.dto.CouponUpdateRequestDTO;
 import com.lbortolotti.coupon.api.service.ICouponService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
@@ -28,8 +26,18 @@ private final ICouponService couponService;
 
         CouponResponseDTO couponResponse =  couponService.saveCoupon(couponRequestDTO);
 
-        URI location = URI.create("/coupons/" + couponResponse.getId());
+        URI location = URI.create("/coupons/" + couponResponse.getCode());
 
         return ResponseEntity.created(location).body(couponResponse);
+    }
+
+    @PutMapping("/{code}")
+    public ResponseEntity<CouponResponseDTO> updateCoupon(
+            @Valid @RequestBody CouponUpdateRequestDTO updateRequestDTO,
+            @PathVariable String code) {
+
+        CouponResponseDTO couponResponse = couponService.updateCoupon(updateRequestDTO, code);
+
+        return ResponseEntity.ok(couponResponse);
     }
 }
