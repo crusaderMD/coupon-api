@@ -33,4 +33,15 @@ public interface ICouponController {
             @ApiResponse(responseCode = "404", description = "Coupon not found")
     })
     ResponseEntity<CouponResponseDTO> updateCoupon(CouponUpdateRequestDTO updateRequestDTO, String code);
+
+    @Operation(
+        summary =  "Obtain a coupon",
+        description = "Obtains a coupon by its code"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Coupon successfully obtained"),
+            @ApiResponse(responseCode = "400", description = "Invalid request"),
+            @ApiResponse(responseCode = "404", description = "Coupon not found")
+    })
+    ResponseEntity<CouponResponseDTO> findCouponByCode(String code);
 }

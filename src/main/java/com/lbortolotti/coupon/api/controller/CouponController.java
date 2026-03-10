@@ -40,4 +40,12 @@ private final ICouponService couponService;
 
         return ResponseEntity.ok(couponResponse);
     }
+
+    @GetMapping("/{code}")
+    public ResponseEntity<CouponResponseDTO> findCouponByCode(@PathVariable String code) {
+
+        CouponResponseDTO couponResponse = couponService.findCouponByCode(code);
+
+        return ResponseEntity.ok(couponResponse);
+    }
 }

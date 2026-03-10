@@ -3,6 +3,8 @@ package com.lbortolotti.coupon.api.exception;
 import com.lbortolotti.coupon.api.controller.dto.ErrorResponseDTO;
 import com.lbortolotti.coupon.api.error.ApiErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -13,9 +15,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponseDTO> handleException(Exception ex,
                                                             HttpServletRequest request) {
+        log.error("Unexpected error", ex);
         ErrorResponseDTO response = ErrorResponseDTO.of(HttpStatus.INTERNAL_SERVER_ERROR,
                 ApiErrorCode.INTERNAL_SERVER_ERROR.getDefaultMessage(),
                 ApiErrorCode.INTERNAL_SERVER_ERROR,
@@ -27,6 +32,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handleBusinessException(BusinessException ex,
                                                                     HttpServletRequest request) {
 
+        log.warn("Business error: {}", ex.getMessage());
+
         ApiErrorCode errorCode = ex.getApiErrorCode();
 
         ErrorResponseDTO response = ErrorResponseDTO.of(
@@ -34,7 +41,7 @@ public class GlobalExceptionHandler {
                 ex.getMessage(),
                 errorCode,
                 request.getRequestURI());
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+        return ResponseEntity.status(errorCode.getHttpStatus()).body(response);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

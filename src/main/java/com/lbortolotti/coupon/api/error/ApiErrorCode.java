@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 
 public enum ApiErrorCode {
     COUPON_ALREADY_EXISTS(HttpStatus.CONFLICT,"Coupon already exists"),
+    COUPON_NOT_FOUND(HttpStatus.NOT_FOUND, "Coupon not found"),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected internal error"),
     VALIDATION_ERROR(HttpStatus.BAD_REQUEST, "Validation error");
 

@@ -9,4 +9,6 @@ public interface ICouponService {
     CouponResponseDTO saveCoupon(CouponRequestDTO requestDTO);
 
     CouponResponseDTO updateCoupon(CouponUpdateRequestDTO couponUpdateRequestDTO, String code);
+
+    CouponResponseDTO findCouponByCode(String code);
 }

@@ -5,9 +5,13 @@ import com.lbortolotti.coupon.api.controller.dto.CouponResponseDTO;
 import com.lbortolotti.coupon.api.controller.dto.CouponUpdateRequestDTO;
 import com.lbortolotti.coupon.api.domain.Coupon;
 import com.lbortolotti.coupon.api.exception.CouponAlreadyExistsException;
+import com.lbortolotti.coupon.api.exception.CouponNotFoundException;
 import com.lbortolotti.coupon.api.mapper.CouponMapper;
 import com.lbortolotti.coupon.api.repository.CouponRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class CouponService implements ICouponService{
@@ -18,6 +22,7 @@ public class CouponService implements ICouponService{
         this.couponRepository = couponRepository;
     }
 
+    @Override
     public CouponResponseDTO saveCoupon(CouponRequestDTO requestDTO) {
 
         if (couponRepository.existsByCode(requestDTO.getCode())) {
@@ -31,16 +36,26 @@ public class CouponService implements ICouponService{
         return CouponMapper.toResponse(savedCoupon);
     }
 
+    @Transactional
+    @Override
     public CouponResponseDTO updateCoupon(CouponUpdateRequestDTO couponUpdateRequestDTO, String code) {
 
-        Coupon coupon = couponRepository.findByCode(code);
-
-        if (coupon == null) {
-            throw new RuntimeException(""); //change for specific exception
-        }
+        Coupon coupon = couponRepository
+                .findByCode(code)
+                .orElseThrow(() -> new CouponNotFoundException(code));
 
         coupon.update(couponUpdateRequestDTO.getDiscount(), couponUpdateRequestDTO.getExpirationDate());
 
-        return CouponMapper.toResponse(couponRepository.save(coupon));
+        return CouponMapper.toResponse(coupon);
+    }
+
+    @Override
+    public CouponResponseDTO findCouponByCode(String code) {
+
+        Coupon coupon = couponRepository
+                .findByCode(code)
+                .orElseThrow(() -> new CouponNotFoundException(code));
+
+        return CouponMapper.toResponse(coupon);
     }
 }
