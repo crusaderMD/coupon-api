@@ -23,7 +23,7 @@ public class ErrorResponseDTO {
 
     public static ErrorResponseDTO of(HttpStatus status, String message, ApiErrorCode apiErrorCode, String path) {
         LocalDateTime timeStamp = LocalDateTime.now();
-        return new ErrorResponseDTO(LocalDateTime.now(), status.value(), message, path, apiErrorCode.name());
+        return new ErrorResponseDTO(timeStamp, status.value(), message, path, apiErrorCode.name());
     }
 
     public LocalDateTime getTimeStamp() {
