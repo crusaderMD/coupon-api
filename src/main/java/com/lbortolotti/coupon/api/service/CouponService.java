@@ -11,7 +11,8 @@ import com.lbortolotti.coupon.api.repository.CouponRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CouponService implements ICouponService{
@@ -40,9 +41,7 @@ public class CouponService implements ICouponService{
     @Override
     public CouponResponseDTO updateCoupon(CouponUpdateRequestDTO couponUpdateRequestDTO, String code) {
 
-        Coupon coupon = couponRepository
-                .findByCode(code)
-                .orElseThrow(() -> new CouponNotFoundException(code));
+        Coupon coupon = getCoupon(code);
 
         coupon.update(couponUpdateRequestDTO.getDiscount(), couponUpdateRequestDTO.getExpirationDate());
 
@@ -52,10 +51,32 @@ public class CouponService implements ICouponService{
     @Override
     public CouponResponseDTO findCouponByCode(String code) {
 
-        Coupon coupon = couponRepository
-                .findByCode(code)
-                .orElseThrow(() -> new CouponNotFoundException(code));
+        Coupon coupon = getCoupon(code);
 
         return CouponMapper.toResponse(coupon);
+    }
+
+    @Override
+    public List<CouponResponseDTO> findAllCoupons() {
+
+        List<Coupon> couponList = couponRepository.findAll();
+
+        return couponList.stream()
+                .map(CouponMapper::toResponse)
+                .toList();
+    }
+
+    @Override
+    public void deleteCoupon(String code) {
+
+        Coupon coupon = getCoupon(code);
+
+        couponRepository.deleteByCode(coupon);
+    }
+
+    private Coupon getCoupon(String code) {
+        return couponRepository
+                .findByCode(code)
+                .orElseThrow(() -> new CouponNotFoundException(code));
     }
 }
