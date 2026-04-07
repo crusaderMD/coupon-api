@@ -83,7 +83,7 @@ public class Coupon {
             throw new RuntimeException("Expiration date cannot be null"); // change to specific exception
         }
 
-        if (discount < ApiConstants.minCouponDiscount || discount > ApiConstants.maxCouponDiscount) {
+        if (discount < ApiConstants.MIN_COUPON_DISCOUNT || discount > ApiConstants.MAX_COUPON_DISCOUNT) {
             throw new RuntimeException(""); // change for specific InvalidDiscountException
         }
 

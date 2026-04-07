@@ -12,7 +12,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CouponService implements ICouponService{
@@ -71,7 +70,7 @@ public class CouponService implements ICouponService{
 
         Coupon coupon = getCoupon(code);
 
-        couponRepository.deleteByCode(coupon);
+        couponRepository.deleteCoupon(coupon);
     }
 
     private Coupon getCoupon(String code) {

@@ -11,5 +11,5 @@ public interface CouponRepository extends JpaRepository<Coupon, Long> {
 
     Optional<Coupon> findByCode(String code);
 
-    void deleteByCode(Coupon coupon);
+    void deleteCoupon(Coupon coupon);
 }
